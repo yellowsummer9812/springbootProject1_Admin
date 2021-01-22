@@ -1,33 +1,14 @@
 package com.example.study.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor// 모든 변수를 매개변수로 받는 생성자를 만들어줌
+@NoArgsConstructor
 public class SearchParam {
     private String account;
     private String email;
     private int page;
-
-    // { "account" : "", "email" : "", "page" : 0}
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public int getPage() {
-        return page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
-    }
 }
