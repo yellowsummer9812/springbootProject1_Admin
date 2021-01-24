@@ -2,9 +2,11 @@ package com.example.study.repository;
 
 import com.example.study.StudyApplicationTests;
 import com.example.study.model.Entity.User;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -53,8 +55,19 @@ public class UserRepositoryTest extends StudyApplicationTests {
         });
     }
 
+    @Test
+    @Transactional // query는 실행되지만 roll back해줌, 데이터에 변경 X
     public void delete(){
+        Optional<User> user = userRepository.findById(3L);
 
+        Assertions.assertTrue(user.isPresent()); // 이 과정이 무조건 있어야함
+
+        user.ifPresent(selectUser->{
+            userRepository.delete(selectUser);
+        });
+        Optional<User> deleteUser = userRepository.findById(3L); // 삭제됐는지 확인하기 위해서
+
+        Assertions.assertFalse(deleteUser.isPresent());
     }
 
 
