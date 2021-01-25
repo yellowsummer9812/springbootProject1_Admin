@@ -3,17 +3,16 @@ package com.example.study.model.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity // order_detail
+@ToString(exclude = {"user", "item"}) // OrderDetail과 User / Item이 서로 상호충돌하는 것 방지
 public class OrderDetail {
 
     @Id
@@ -22,7 +21,11 @@ public class OrderDetail {
 
     private LocalDateTime orderAt;
 
-    private Long userId;
+    // N : 1
+    @ManyToOne
+    private User user; // 반드시 Long 형이 아니라 객체를 연결시켜야한다.
 
-    private Long itemId;
+    // N : 1
+    @ManyToOne
+    private Item item;
 }

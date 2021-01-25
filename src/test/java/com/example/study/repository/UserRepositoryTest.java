@@ -1,6 +1,7 @@
 package com.example.study.repository;
 
 import com.example.study.StudyApplicationTests;
+import com.example.study.model.Entity.Item;
 import com.example.study.model.Entity.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -33,12 +34,15 @@ public class UserRepositoryTest extends StudyApplicationTests {
     }
 
     @Test
+    @Transactional
     public void read(){
-        Optional<User> user = userRepository.findById(2L);
+        Optional<User> user = userRepository.findById(4L);
 
         user.ifPresent(selectUser -> { // selectUser가 Optional에 들어있으면 아래문장 실행
-            System.out.println("user : " + selectUser);
-            System.out.println("email : " + selectUser.getEmail());
+            selectUser.getOrderDetailList().stream().forEach(detail -> {
+                Item item = detail.getItem();
+                System.out.println(item);
+            });
         });
     }
 
