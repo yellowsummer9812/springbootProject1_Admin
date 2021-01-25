@@ -21,14 +21,14 @@ public class UserRepositoryTest extends StudyApplicationTests {
         // String sql = insert into user (%s, %s, %d) value (account, email, age);
         User user = new User();
         // user.setId(); -> Not Null에 Auto Increament이기 때문에 자동으로 해줌
-        user.setAccount("TestUser02");
-        user.setEmail("TestUser02@gmail.com");
-        user.setPhoneNumber("010-1111-1111");
+        user.setAccount("TestUser03");
+        user.setEmail("TestUser03@gmail.com");
+        user.setPhoneNumber("010-1111-3333");
         user.setCreatedAt(LocalDateTime.now());
-        user.setCreatedBy("TestUser2"); // "TestUser01" 해도 상관 없음
+        user.setCreatedBy("TestUser3"); // "TestUser01" 해도 상관 없음
 
         User newUser = userRepository.save(user);
-        System.out.println("newUser : " + newUser);
+        Assertions.assertNotNull(newUser);
 
     }
 
