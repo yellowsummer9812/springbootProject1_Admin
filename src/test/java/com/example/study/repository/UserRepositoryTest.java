@@ -19,14 +19,24 @@ public class UserRepositoryTest extends StudyApplicationTests {
 
     @Test
     public void create(){
-        // String sql = insert into user (%s, %s, %d) value (account, email, age);
+        String account = "Test01";
+        String password = "Test01";
+        String status = "REGISTERED";
+        String email = "Test01@gmail.com";
+        String phoneNumber = "010-1111-2222";
+        LocalDateTime registeredAt = LocalDateTime.now();
+        LocalDateTime createdAt = LocalDateTime.now();
+        String createdBy = "AdminServer";
+
         User user = new User();
-        // user.setId(); -> Not Null에 Auto Increament이기 때문에 자동으로 해줌
-        user.setAccount("TestUser03");
-        user.setEmail("TestUser03@gmail.com");
-        user.setPhoneNumber("010-1111-3333");
-        user.setCreatedAt(LocalDateTime.now());
-        user.setCreatedBy("TestUser3"); // "TestUser01" 해도 상관 없음
+        user.setAccount(account);
+        user.setPassword(password);
+        user.setStatus(status);
+        user.setEmail(email);
+        user.setPhoneNumber(phoneNumber);
+        user.setRegisteredAt(registeredAt);
+        user.setCreatedAt(createdAt);
+        user.setCreatedBy(createdBy);
 
         User newUser = userRepository.save(user);
         Assertions.assertNotNull(newUser);
@@ -37,15 +47,8 @@ public class UserRepositoryTest extends StudyApplicationTests {
     @Transactional
     public void read(){
 
-        // select * from user where id = ?
-        Optional<User> user = userRepository.findByAccount("TestUser03");
-
-        user.ifPresent(selectUser -> { // selectUser가 Optional에 들어있으면 아래문장 실행
-            selectUser.getOrderDetailList().stream().forEach(detail -> {
-                Item item = detail.getItem();
-                System.out.println(item);
-            });
-        });
+        User user = userRepository.findFirstByPhoneNumberOrderByIdDesc("010-1111-2222");
+        Assertions.assertNotNull(user);
     }
 
     @Test
