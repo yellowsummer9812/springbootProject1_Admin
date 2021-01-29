@@ -59,8 +59,14 @@ public class UserRepositoryTest extends StudyApplicationTests {
 
                 System.out.println("----------주문 상세----------");
                 orderGroup.getOrderDetailList().forEach(orderDetail -> {
+                    System.out.println("파트너사 이름 : " + orderDetail.getItem().getPartner().getName());
+                    System.out.println("파트너사 카테고리 : " + orderDetail.getItem().getPartner().getCategory().getTitle());
+                    System.out.println("주문 상품 : " + orderDetail.getItem().getName());
+                    System.out.println("고객센터 번호 : " + orderDetail.getItem().getPartner().getCallCenter());
                     System.out.println("주문 상태 : " + orderDetail.getStatus());
                     System.out.println("도착 예정 일자 : " + orderDetail.getArrivalDate());
+
+
                 });
             });
         }

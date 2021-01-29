@@ -3,18 +3,18 @@ package com.example.study.model.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
+@ToString(exclude = {"partnerList"})
 public class Category {
 
     @Id
@@ -32,4 +32,8 @@ public class Category {
     private LocalDateTime updatedAt;
 
     private String updatedBy;
+
+    // Category : Partner = 1 : N 카테고리 하나 당 여러 파트너
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
+    private List<Partner> partnerList;
 }
