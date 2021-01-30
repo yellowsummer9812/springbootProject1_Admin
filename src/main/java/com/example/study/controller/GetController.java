@@ -1,6 +1,7 @@
 package com.example.study.controller;
 
 import com.example.study.model.SearchParam;
+import com.example.study.model.network.Header;
 import org.springframework.web.bind.annotation.*;
 
 @RestController // 컨트롤러로 사용할 거라고 spring에게 알리는 지시자
@@ -36,5 +37,12 @@ public class GetController {
         // 네트워크 통신을 할 때는 json형태로
         // { "account" : "", "email" : "", "page" : 0}
         return searchParam;
+    }
+
+    @GetMapping("/header")
+    public Header getHeader(){
+
+        // {"resultCode: "OK", "description": "OK"}
+        return Header.builder().resultCode("OK").description("OK").build();
     }
 }
