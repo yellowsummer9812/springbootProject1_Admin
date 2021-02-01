@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.annotation.security.DenyAll;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -24,4 +25,8 @@ public class UserApiRequest {
     private String email;
 
     private String phoneNumber;
+
+    private LocalDateTime registeredAt;
+
+    private LocalDateTime unregisteredAt;
 }
