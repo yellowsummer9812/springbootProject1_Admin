@@ -1,7 +1,9 @@
-package com.example.study.model.Entity;
+package com.example.study.model.entity;
 
-import com.example.study.model.enumclass.ItemStatus;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -10,36 +12,34 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Entity
-@ToString(exclude = {"orderDetailList", "partner"})
 @EntityListeners(AuditingEntityListener.class)
 @Builder
 @Accessors(chain = true)
-public class Item {
+public class AdminUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private ItemStatus status; // 등록/ 해지/ 검수중(등록대기중)
+    private String account;
 
-    private String name;
+    private String password;
 
-    private String title;
+    private String status;
 
-    private String content;
+    private String role;
 
-    private BigDecimal price;
+    private LocalDateTime lastLoginAt;
 
-    private String brandName;
+    private LocalDateTime passwordUpdatedAt;
+
+    private Integer loginFailCount;
 
     private LocalDateTime registeredAt;
 
@@ -57,11 +57,4 @@ public class Item {
     @LastModifiedBy
     private String updatedBy;
 
-    // Item : Partner = N : 1
-    @ManyToOne
-    private Partner partner;
-
-    // Item : OrderDetail = 1: N
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
-    private List<OrderDetail> orderDetailList;
 }

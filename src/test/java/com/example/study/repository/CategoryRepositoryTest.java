@@ -1,7 +1,7 @@
 package com.example.study.repository;
 
 import com.example.study.StudyApplicationTests;
-import com.example.study.model.Entity.Category;
+import com.example.study.model.entity.Category;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

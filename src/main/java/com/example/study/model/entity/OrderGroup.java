@@ -1,5 +1,6 @@
-package com.example.study.model.Entity;
+package com.example.study.model.entity;
 
+import com.example.study.model.enumclass.OrderType;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
@@ -9,40 +10,42 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Entity
-@ToString(exclude = {"itemList", "category"})
+@ToString(exclude = {"user", "orderDetailList"})
 @EntityListeners(AuditingEntityListener.class)
 @Builder
 @Accessors(chain = true)
-public class Partner {
+public class OrderGroup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
     private String status;
 
-    private String address;
+    @Enumerated(EnumType.STRING)
+    private OrderType orderType; // 주문의 형태 - 일괄 / 개별
 
-    private String callCenter;
+    private String revAddress;
 
-    private String partnerNumber;
+    private String revName;
 
-    private String businessNumber;
+    private String paymentType; // 카드 / 현금
 
-    private String ceoName;
+    private BigDecimal totalPrice;
 
-    private LocalDateTime registeredAt;
+    private Integer totalQuantity;
 
-    private LocalDateTime unregisteredAt;
+    private LocalDateTime orderAt;
+
+    private LocalDateTime arrivalDate;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -56,11 +59,11 @@ public class Partner {
     @LastModifiedBy
     private String updatedBy;
 
-    // Partner : Category = N : 1
+    // OrderGroup : User = N : 1
     @ManyToOne
-    private Category category;
+    private User user;
 
-    // Partner : Item = 1 : N 한 개의 파트너마다 여러 개의 아이템Id를 가질 수 있다.
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "partner")
-    private List<Item> itemList;
+    // OrderGroup : OrderDetail = 1 : N
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "orderGroup")
+    private List<OrderDetail> orderDetailList;
 }

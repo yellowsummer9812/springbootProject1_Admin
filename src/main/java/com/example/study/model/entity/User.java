@@ -1,5 +1,6 @@
-package com.example.study.model.Entity;
+package com.example.study.model.entity;
 
+import com.example.study.model.enumclass.UserStatus;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
@@ -9,27 +10,38 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
-@Entity
-@ToString(exclude = {"partnerList"})
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity // == table
+@ToString(exclude = {"orderGroupList"})
 @EntityListeners(AuditingEntityListener.class)
 @Builder
 @Accessors(chain = true)
-public class Category {
+// @Table(name = "user")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String type;
+    private String account;
 
-    private String title;
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private UserStatus status; // 고정된 값 사용 REGISTERED / UNREGISTERED / WAITING /
+
+    private String email;
+
+    private String phoneNumber;
+
+    private LocalDateTime registeredAt;
+
+    private LocalDateTime unregisteredAt;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -43,7 +55,7 @@ public class Category {
     @LastModifiedBy
     private String updatedBy;
 
-    // Category : Partner = 1 : N 카테고리 하나 당 여러 파트너
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
-    private List<Partner> partnerList;
+    // User : OrderGroup = 1 : N
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<OrderGroup> orderGroupList;
 }

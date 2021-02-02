@@ -1,11 +1,9 @@
 package com.example.study.service;
 
-import com.example.study.ifs.CrudInterface;
-import com.example.study.model.Entity.Item;
+import com.example.study.model.entity.Item;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.ItemApiRequest;
 import com.example.study.model.network.response.ItemApiResponse;
-import com.example.study.repository.ItemRepository;
 import com.example.study.repository.PartnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

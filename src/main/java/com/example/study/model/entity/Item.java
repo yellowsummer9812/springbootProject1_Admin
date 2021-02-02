@@ -1,6 +1,6 @@
-package com.example.study.model.Entity;
+package com.example.study.model.entity;
 
-import com.example.study.model.enumclass.OrderType;
+import com.example.study.model.enumclass.ItemStatus;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
@@ -14,38 +14,36 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Entity
-@ToString(exclude = {"user", "orderDetailList"})
+@ToString(exclude = {"orderDetailList", "partner"})
 @EntityListeners(AuditingEntityListener.class)
 @Builder
 @Accessors(chain = true)
-public class OrderGroup {
+public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status;
-
     @Enumerated(EnumType.STRING)
-    private OrderType orderType; // 주문의 형태 - 일괄 / 개별
+    private ItemStatus status; // 등록/ 해지/ 검수중(등록대기중)
 
-    private String revAddress;
+    private String name;
 
-    private String revName;
+    private String title;
 
-    private String paymentType; // 카드 / 현금
+    private String content;
 
-    private BigDecimal totalPrice;
+    private BigDecimal price;
 
-    private Integer totalQuantity;
+    private String brandName;
 
-    private LocalDateTime orderAt;
+    private LocalDateTime registeredAt;
 
-    private LocalDateTime arrivalDate;
+    private LocalDateTime unregisteredAt;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -59,11 +57,11 @@ public class OrderGroup {
     @LastModifiedBy
     private String updatedBy;
 
-    // OrderGroup : User = N : 1
+    // Item : Partner = N : 1
     @ManyToOne
-    private User user;
+    private Partner partner;
 
-    // OrderGroup : OrderDetail = 1 : N
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "orderGroup")
+    // Item : OrderDetail = 1: N
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
     private List<OrderDetail> orderDetailList;
 }
