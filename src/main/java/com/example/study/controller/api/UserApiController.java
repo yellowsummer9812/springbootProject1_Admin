@@ -1,5 +1,6 @@
 package com.example.study.controller.api;
 
+import com.example.study.controller.CrudController;
 import com.example.study.ifs.CrudInterface;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.UserApiRequest;
@@ -10,41 +11,19 @@ import org.apache.commons.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
+
 // User의 정보를 가져옴
 @Slf4j
 @RestController
 @RequestMapping("/api/user")
-public class UserApiController implements CrudInterface<UserApiRequest, UserApiResponse> {
+public class UserApiController extends CrudController<UserApiRequest, UserApiResponse> {
 
     @Autowired
     private UserApiLogicService userApiLogicService;
 
-    // CRUD구현을 위해
-    @Override
-    @PostMapping("") // /api/user
-    public Header<UserApiResponse> create(@RequestBody Header<UserApiRequest> request) {
-        log.info("{}", request);
-        return userApiLogicService.create(request);
+    @PostConstruct
+    public void init(){
+        this.baseService = userApiLogicService;
     }
-
-    @Override
-    @GetMapping("{id}") // api/user/{id}
-    public Header<UserApiResponse> read(@PathVariable(name = "id") Long id) {
-        log.info("read : {}", id);
-        return userApiLogicService.read(id);
-    }
-
-    @Override
-    @PutMapping("") // api/user
-    public Header<UserApiResponse> update(@RequestBody Header<UserApiRequest> request) {
-        return userApiLogicService.update(request);
-    }
-
-    @Override
-    @DeleteMapping("{id}") // /api/user/{id}
-    public Header delete(@PathVariable  Long id) {
-        log.info("delete : {}", id);
-        return userApiLogicService.delete(id);
-    }
-
 }
