@@ -5,6 +5,7 @@ import com.example.study.model.entity.User;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.Pagination;
 import com.example.study.model.network.response.UserApiResponse;
+import com.example.study.model.network.response.UserOrderInfoApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,4 +40,5 @@ public abstract class BaseService<Req, Res, Entity> implements CrudInterface<Req
 
         return Header.OK(baseApiResponseList, pagination);
     }
+
 }

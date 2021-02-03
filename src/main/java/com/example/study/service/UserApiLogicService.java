@@ -1,14 +1,22 @@
 package com.example.study.service;
 
+import com.example.study.model.entity.Item;
+import com.example.study.model.entity.OrderGroup;
 import com.example.study.model.entity.User;
 import com.example.study.model.enumclass.UserStatus;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.UserApiRequest;
+import com.example.study.model.network.response.ItemApiResponse;
+import com.example.study.model.network.response.OrderGroupApiResponse;
 import com.example.study.model.network.response.UserApiResponse;
+import com.example.study.model.network.response.UserOrderInfoApiResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResponse, User> {
@@ -16,6 +24,13 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
     // 1. request data를 가져오기
     // 2. user를 생성
     // 3. 생성된 데이터 -> UserApiResponse 만들어서 return
+
+    @Autowired
+    private OrderGroupApiLogicService orderGroupApiLogicService;
+
+    @Autowired
+    private ItemApiLogicService itemApiLogicService;
+
     @Override
     public Header<UserApiResponse> create(Header<UserApiRequest> request) {
 
@@ -118,5 +133,38 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
 
         // Header에 Data 부분을 합쳐서 return
         return userApiResponse;
+    }
+
+    public Header<UserOrderInfoApiResponse> orderInfo(Long id){
+
+        // user 가져옴
+        User user = baseRepository.getOne(id);
+        UserApiResponse userApiResponse = response(user);
+
+        // orderGroup 가져옴
+        List<OrderGroup> orderGroupList = user.getOrderGroupList();
+        List<OrderGroupApiResponse> orderGroupApiResponseList = orderGroupList.stream()
+                .map(orderGroup -> {
+                   OrderGroupApiResponse orderGroupApiResponse =  orderGroupApiLogicService.response(orderGroup);
+
+                   // 해당 orderGroup에 있는 item api response 찾아옴
+                   List<ItemApiResponse> itemApiResponseList = orderGroup.getOrderDetailList().stream()
+                           .map(detail -> detail.getItem())
+                           .map(item -> itemApiLogicService.response(item))
+                           .collect(Collectors.toList());
+
+                   orderGroupApiResponse.setItemApiResponseList(itemApiResponseList);
+                   return orderGroupApiResponse;
+                })
+                .collect(Collectors.toList());
+
+        // user에다가 group내용 지정하고
+        userApiResponse.setOrderGroupApiResponseList(orderGroupApiResponseList);
+
+        UserOrderInfoApiResponse userOrderInfoApiResponse = UserOrderInfoApiResponse.builder()
+                .userApiResponse(userApiResponse)
+                .build()
+                ;
+        return Header.OK(userOrderInfoApiResponse);
     }
 }
