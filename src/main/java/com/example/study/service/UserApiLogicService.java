@@ -35,7 +35,7 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
 
         // 3. 생성된 데이터 -> UserApiResponse 만들어서 return
         // -> create 뿐만 아니라 read든 다른 method에서도 쓸 수 있기 때문에 따로 빼둠
-        return response(newUser);
+        return Header.OK(response(newUser));
     }
 
     @Override
@@ -47,6 +47,8 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
         // user -> userApiResponse return
         return optional
                 .map(user -> response(user))
+                //.map(userApiResponse -> Header.OK(userApiResponse))
+                .map(Header::OK)
                 .orElseGet(// user가 없다면
                         ()->Header.ERROR("데이터 없음")
                 );
@@ -76,6 +78,7 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
         })
                 .map(user -> baseRepository.save(user)) // update
                 .map(updateUser -> response(updateUser)) // userApiResponse
+                .map(Header::OK)
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
 
     }
@@ -98,7 +101,8 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
 
     }
 
-    private Header<UserApiResponse> response(User user){
+
+    public UserApiResponse response(User user){
 
         // user 객체를 가지고 userApiResponse 만듦
         UserApiResponse userApiResponse = UserApiResponse.builder()
@@ -113,6 +117,6 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
                 .build();
 
         // Header에 Data 부분을 합쳐서 return
-        return Header.OK(userApiResponse);
+        return userApiResponse;
     }
 }
